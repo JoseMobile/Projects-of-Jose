@@ -1,4 +1,3 @@
-# Problem Set 3: Simulating the Spread of Disease and Virus Population Dynamics 
 
 import random
 import pylab
@@ -453,9 +452,7 @@ class TreatedPatient(Patient):
 
 
 
-#
-# PROBLEM 4
-#
+
 def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb, resistances,
                        mutProb, perscriptions, numTrials):
     """

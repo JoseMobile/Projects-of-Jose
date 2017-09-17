@@ -1,12 +1,9 @@
-###########################
-# 6.00.2x Problem Set 1: Space Cows 
+
 
 from ps1_partition import get_partitions
 import time
 
-#================================
-# Part A: Transporting Space Cows
-#================================
+
 
 def load_cows(filename):
     """
@@ -31,7 +28,6 @@ def load_cows(filename):
     return cow_dict
 
 
-# Problem 1
 def greedy_cow_transport(cows,limit=10):
     """
     Uses a greedy heuristic to determine an allocation of cows that attempts to
@@ -56,7 +52,7 @@ def greedy_cow_transport(cows,limit=10):
     """
     cow_select = []
     sorted_cows = (sorted(cows, key = cows.get, reverse = True))
-#    sorted_cows1 = 
+
     sorted_cows1 = sorted_cows.copy()
     
     while True:
@@ -82,14 +78,13 @@ def greedy_cow_transport(cows,limit=10):
            
             sorted_cows = sorted_cows1[:]
 
-# Problem 2
+
 def ship_weight(cows, ship):
     weight = 0
     for cow in ship:
         weight += cows[cow]
     return weight
-        
-# Problem 2
+
 def brute_force_cow_transport(cows,limit=10):
     """
     Finds the allocation of cows that minimizes the number of spaceship trips
@@ -131,7 +126,7 @@ def brute_force_cow_transport(cows,limit=10):
 
 
         
-# Problem 3
+
 def compare_cow_transport_algorithms():
     """
     Using the data from ps1_cow_data.txt and the specified weight limit, run your

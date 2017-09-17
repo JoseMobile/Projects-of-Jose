@@ -1,25 +1,10 @@
-# 6.00.2x Problem Set 2: Simulating robots
+
 
 import math
 import random
-
-import ps2_visualize
 import pylab
 
-##################
-## Comment/uncomment the relevant lines, depending on which version of Python you have
-##################
 
-# For Python 3.5:
-#from ps2_verify_movement35 import testRobotMovement
-# If you get a "Bad magic number" ImportError, you are not using Python 3.5 
-
-# For Python 3.6:
-from ps2_verify_movement36 import testRobotMovement
-# If you get a "Bad magic number" ImportError, you are not using Python 3.6
-
-
-# === Provided class Position
 class Position(object):
     """
     A Position represents a location in a two-dimensional room.
@@ -64,7 +49,7 @@ class Position(object):
         return "(%0.2f, %0.2f)" % (self.x, self.y)
 
 
-# === Problem 1
+
 class RectangularRoom(object):
     """
     A RectangularRoom represents a rectangular region containing clean or dirty
@@ -157,7 +142,6 @@ class RectangularRoom(object):
 
 
 
-# === Problem 2
 class Robot(object):
     """
     Represents a robot cleaning a particular room.
@@ -233,7 +217,6 @@ class Robot(object):
         raise NotImplementedError
 
 
-# === Problem 3
 class StandardRobot(Robot):
     """
     A StandardRobot is a Robot with the standard movement strategy.
@@ -266,7 +249,6 @@ class StandardRobot(Robot):
 ##testRobotMovement(StandardRobot, RectangularRoom)
 
 
-# === Problem 4
 def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
                   robot_type):
     """
@@ -340,7 +322,7 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
 ##print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
 
 
-# === Problem 5
+
 class RandomWalkRobot(Robot):
     """
     A RandomWalkRobot is a robot with the "random walk" movement strategy: it

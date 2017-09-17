@@ -12,8 +12,7 @@ def partitions(set_):
             yield [parts[0]]+b
 
 
-# This is a helper function that will fetch all of the available 
-# partitions for you to use for your brute force algorithm.
+
 def get_partitions(set_):
     for partition in partitions(set_):
         yield [list(elt) for elt in partition]
