@@ -1,8 +1,24 @@
-
-
 from ps1_partition import get_partitions
 import time
+import pandas as pd
 
+
+def partitions(set_):
+    if not set_:
+        yield []
+        return
+    for i in range(2 ** len(set_) // 2):
+        parts = [set(), set()]
+        for item in set_:
+            parts[i & 1].add(item)
+            i >>= 1
+        for b in partitions(parts[1]):
+            yield [parts[0]] + b
+
+
+def get_partitions(set_):
+    for partition in partitions(set_):
+        yield [list(elt) for elt in partition]
 
 
 def load_cows(filename):
@@ -18,17 +34,11 @@ def load_cows(filename):
     a dictionary of cow name (string), weight (int) pairs
     """
 
-    cow_dict = dict()
-
-    f = open(filename, 'r')
-    
-    for line in f:
-        line_data = line.split(',')
-        cow_dict[line_data[0]] = int(line_data[1])
-    return cow_dict
+    df = pd.read_csv(filename, header=None)
+    return dict(zip(df[0], (df[1].apply(lambda x: int(x)))))
 
 
-def greedy_cow_transport(cows,limit=10):
+def greedy_cow_transport(cows, limit=10):
     """
     Uses a greedy heuristic to determine an allocation of cows that attempts to
     minimize the number of spaceship trips needed to transport all the cows. The
@@ -51,32 +61,26 @@ def greedy_cow_transport(cows,limit=10):
     trips
     """
     cow_select = []
-    sorted_cows = (sorted(cows, key = cows.get, reverse = True))
+    sorted_cows = (sorted(cows, key=cows.get, reverse=True))
+    weight = 0
+    ship = []
 
-    sorted_cows1 = sorted_cows.copy()
-    
-    while True:
-        ship = []# new ship
-        
-        if sorted_cows1 == [] or cows[sorted_cows1[-1]] > limit:
-            return cow_select
-        else:
-            weight = 0
-            for cow in sorted_cows:
-                
-                if weight + cows[sorted_cows[-1]] > limit:
-                    break     
-                elif ship == [] or cows[cow] + weight <= limit:
-                    ship.append(cow)
-                    weight += cows[cow]
-                    sorted_cows1.remove(cow)
-                   
-                     
-            if ship != []:
-                
+    for cow in sorted_cows:
+
+        if ship == [] or cows[cow] + weight <= limit:
+            ship.append(cow)
+            weight += cows[cow]
+            # flag in the case that the all cows fit into the same ship
+            if cow == sorted_cows[-1]:
                 cow_select.append(ship)
-           
-            sorted_cows = sorted_cows1[:]
+
+        elif weight + cows[cow] > limit:
+            cow_select.append(ship)
+            ship = []
+            ship.append(cow)
+            weight = cows[cow]
+
+    return cow_select
 
 
 def ship_weight(cows, ship):
@@ -85,7 +89,8 @@ def ship_weight(cows, ship):
         weight += cows[cow]
     return weight
 
-def brute_force_cow_transport(cows,limit=10):
+
+def brute_force_cow_transport(cows, limit=10):
     """
     Finds the allocation of cows that minimizes the number of spaceship trips
     via brute force.  The brute force algorithm should follow the following method:
@@ -111,21 +116,21 @@ def brute_force_cow_transport(cows,limit=10):
     feasible = []
     for combo in (get_partitions(cow_list)):
         combo_list.append(combo)
+
     for combo in combo_list:
         valid_combo = True
-        for ship in combo: 
-            if ship_weight(cows,ship) > limit:
+        for ship in combo:
+            if ship_weight(cows, ship) > limit:
                 valid_combo = False
                 break
             else:
                 pass
         if valid_combo:
             feasible.append((len(combo), combo))
-    sorted_list = sorted(feasible, key = lambda tup: tup[0])
+
+    sorted_list = sorted(feasible, key=lambda tup: tup[0])
     return sorted_list[0][1]
 
-
-        
 
 def compare_cow_transport_algorithms():
     """
@@ -150,17 +155,10 @@ def compare_cow_transport_algorithms():
     print(end - start, 'brute_force algorithm time')
 
 
-"""
-Here is some test data for you to see the results of your algorithms with. 
-Do not submit this along with any of your answers. Uncomment the last two
-lines to print the result of your problem.
-"""
-
-cows = load_cows("ps1_cow_data.txt")
-limit=100
+cows = load_cows("cow_data.txt")
+limit = 10
 print(cows)
 
 print(greedy_cow_transport(cows, limit))
 print(brute_force_cow_transport(cows, limit))
 print(compare_cow_transport_algorithms())
-
